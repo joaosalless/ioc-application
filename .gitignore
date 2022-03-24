@@ -1,0 +1,4 @@
+**/node_modules/
+**/dist/
+**/buildAws
+node_modules/
