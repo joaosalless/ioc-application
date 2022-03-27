@@ -2,3 +2,4 @@
 **/dist/
 **/buildAws
 node_modules/
+coverage/
