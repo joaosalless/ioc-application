@@ -8,10 +8,10 @@ import { LoggerServiceInterface } from './logger-service';
 import { AbstractService, AbstractServiceInterface } from "./abstract-service";
 
 export interface HttpRequestPayloadInterface {
-  method: string; 
-  url: string; 
-  body: any; 
-  headers: any; 
+  method: string;
+  url: string;
+  body: any;
+  headers: any;
   schema?: string;
 }
 
