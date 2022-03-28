@@ -23,7 +23,7 @@ export class ApplicationService extends AbstractService implements ApplicationSe
     @inject(TYPES.AppShortEnv) private _shortEnv: string,
   ) {
     super(_container);
-    this.logger = _container.get<LoggerServiceInterface>(TYPES.LoggerServiceInterface)
+    this.logger = _container.get<LoggerServiceInterface>(TYPES.LoggerServiceInterface);
   }
 
   public name(): string {

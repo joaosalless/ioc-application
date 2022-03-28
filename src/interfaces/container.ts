@@ -9,7 +9,10 @@ const TYPES = {
   AuditServiceInterface: Symbol.for("AuditServiceInterface"),
   AuthorizerServiceInterface: Symbol.for("AuthorizerServiceInterface"),
   ConfigServiceInterface: Symbol.for("ConfigServiceInterface"),
+  ConsentServiceInterface: Symbol.for("ConsentServiceInterface"),
   CryptoServiceInterface: Symbol.for("CryptoServiceInterface"),
+  DatabaseServiceInterface: Symbol.for("DatabaseServiceInterface"),
+  DocumentationServiceInterface: Symbol.for("DocumentationServiceInterface"),
   EntityServiceInterface: Symbol.for("EntityServiceInterface"),
   HealthCheckServiceInterface: Symbol.for("HealthCheckServiceInterface"),
   HttpServiceInterface: Symbol.for("HttpServiceInterface"),
@@ -19,6 +22,7 @@ const TYPES = {
   MaskerServiceInterface: Symbol.for("MaskerServiceInterface"),
   SearchServiceInterface: Symbol.for("SearchServiceInterface"),
   SerializerServiceInterface: Symbol.for("SerializerServiceInterface"),
+  StateServiceInterface: Symbol.for("StateServiceInterface"),
   StorageServiceInterface: Symbol.for("StorageServiceInterface"),
 };
 

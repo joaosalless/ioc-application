@@ -1,11 +1,17 @@
 // Imports
 import "reflect-metadata";
+import { TYPES } from '../src/interfaces/container';
+
+import { AbstractServiceInterface } from "../src/services/abstract-service";
 import { ApplicationService, ApplicationServiceInterface } from './../src/services/application-service';
 import { AuditService, AuditServiceInterface } from './../src/services/audit-service';
 import { AuthorizerService, AuthorizerServiceInterface } from './../src/services/authorizer-service';
 import { ConfigService, ConfigServiceInterface } from '../src/services/config-service';
+import { ConsentService, ConsentServiceInterface } from './../src/services/consent-service';
 import { Container, interfaces, decorate, injectable } from "inversify";
 import { CryptoService, CryptoServiceInterface } from './../src/services/crypto-service';
+import { DatabaseService, DatabaseServiceInterface } from './../src/services/database-service';
+import { DocumentationService, DocumentationServiceInterface } from './../src/services/documentation-service';
 import { EntityService, EntityServiceInterface } from './../src/services/entity-service';
 import { HealthCheckService, HealthCheckServiceInterface } from './../src/services/health-check-service';
 import { HttpService, HttpServiceInterface } from '../src/services/http-service';
@@ -15,9 +21,8 @@ import { LoggerService, LoggerServiceInterface } from '../src/services/logger-se
 import { MaskerService, MaskerServiceInterface } from './../src/services/masker-service';
 import { SearchService, SearchServiceInterface } from './../src/services/search-service';
 import { SerializerService, SerializerServiceInterface } from './../src/services/serializer-service';
+import { StateService, StateServiceInterface } from './../src/services/state-service';
 import { StorageService, StorageServiceInterface } from './../src/services/storage-service';
-import { TYPES } from '../src/interfaces/container';
-import { AbstractServiceInterface } from "../src/services/abstract-service";
 
 // Mocks
 decorate(injectable(), LoggerService);
@@ -34,15 +39,19 @@ const config = {
 
 let container: interfaces.Container;
 let application: ApplicationServiceInterface;
+let applicationInstanceId: string;
 
 // Tests
-describe('Inversify Application', () => {
+describe('IOC Application', () => {
   const SERVICES: string[] = [
     'ApplicationService',
     'AuditService',
     'AuthorizerService',
     'ConfigService',
+    'ConsentService',
     'CryptoService',
+    'DatabaseService',
+    'DocumentationService',
     'EntityService',
     'HealthCheckService',
     'HttpService',
@@ -52,12 +61,14 @@ describe('Inversify Application', () => {
     'MaskerService',
     'SearchService',
     'SerializerService',
+    'StateService',
     'StorageService',
   ];
 
   const bootstrapContainer = (): void => {
     try {
       container = container ? container : new Container();
+
       container.bind<string>(TYPES.AppName).toConstantValue(config.appName);
       container.bind<string>(TYPES.AppVersion).toConstantValue(config.appVersion);
       container.bind<string>(TYPES.AppEnv).toConstantValue(config.appEnv);
@@ -67,7 +78,10 @@ describe('Inversify Application', () => {
       container.bind<AuditServiceInterface>(TYPES.AuditServiceInterface).to(AuditService);
       container.bind<AuthorizerServiceInterface>(TYPES.AuthorizerServiceInterface).to(AuthorizerService);
       container.bind<ConfigServiceInterface>(TYPES.ConfigServiceInterface).to(ConfigService);
+      container.bind<ConsentServiceInterface>(TYPES.ConsentServiceInterface).to(ConsentService);
       container.bind<CryptoServiceInterface>(TYPES.CryptoServiceInterface).to(CryptoService);
+      container.bind<DatabaseServiceInterface>(TYPES.DatabaseServiceInterface).to(DatabaseService);
+      container.bind<DocumentationServiceInterface>(TYPES.DocumentationServiceInterface).to(DocumentationService);
       container.bind<EntityServiceInterface>(TYPES.EntityServiceInterface).to(EntityService);
       container.bind<HealthCheckServiceInterface>(TYPES.HealthCheckServiceInterface).to(HealthCheckService);
       container.bind<HttpServiceInterface>(TYPES.HttpServiceInterface).to(HttpService);
@@ -77,7 +91,12 @@ describe('Inversify Application', () => {
       container.bind<MaskerServiceInterface>(TYPES.MaskerServiceInterface).to(MaskerService);
       container.bind<SearchServiceInterface>(TYPES.SearchServiceInterface).to(SearchService);
       container.bind<SerializerServiceInterface>(TYPES.SerializerServiceInterface).to(SerializerService);
+      container.bind<StateServiceInterface>(TYPES.StateServiceInterface).to(StateService);
       container.bind<StorageServiceInterface>(TYPES.StorageServiceInterface).to(StorageService);
+
+      application = container.get<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface);
+      applicationInstanceId = application.instanceId();
+
     } catch (error) {
       throw error;
     }
@@ -95,6 +114,12 @@ describe('Inversify Application', () => {
 
   it('get Application name from Container instance', async () => {
     expect(container.get<string>(TYPES.AppName)).toBe(config.appName);
+  });
+
+  it('get Application from Container instance', async () => {
+    const iocApplication = container.get<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface);
+
+    expect(iocApplication.instanceId()).toBe(applicationInstanceId);
   });
 
   it('get Container instance from LoggerService', async () => {
