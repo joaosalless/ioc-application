@@ -74,13 +74,13 @@ describe('IOC Application', () => {
       container.bind<string>(TYPES.AppEnv).toConstantValue(config.appEnv);
       container.bind<string>(TYPES.AppShortEnv).toConstantValue(config.appShortEnv);
       container.bind<interfaces.Container>(TYPES.Container).toConstantValue(container);
-      container.bind<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface).to(ApplicationService);
+      container.bind<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface).to(ApplicationService).inSingletonScope();
       container.bind<AuditServiceInterface>(TYPES.AuditServiceInterface).to(AuditService);
       container.bind<AuthorizerServiceInterface>(TYPES.AuthorizerServiceInterface).to(AuthorizerService);
-      container.bind<ConfigServiceInterface>(TYPES.ConfigServiceInterface).to(ConfigService);
-      container.bind<ConsentServiceInterface>(TYPES.ConsentServiceInterface).to(ConsentService);
-      container.bind<CryptoServiceInterface>(TYPES.CryptoServiceInterface).to(CryptoService);
-      container.bind<DatabaseServiceInterface>(TYPES.DatabaseServiceInterface).to(DatabaseService);
+      container.bind<ConfigServiceInterface>(TYPES.ConfigServiceInterface).to(ConfigService).inSingletonScope();
+      container.bind<ConsentServiceInterface>(TYPES.ConsentServiceInterface).to(ConsentService).inTransientScope();
+      container.bind<CryptoServiceInterface>(TYPES.CryptoServiceInterface).to(CryptoService).inTransientScope();
+      container.bind<DatabaseServiceInterface>(TYPES.DatabaseServiceInterface).to(DatabaseService).inSingletonScope();
       container.bind<DocumentationServiceInterface>(TYPES.DocumentationServiceInterface).to(DocumentationService);
       container.bind<EntityServiceInterface>(TYPES.EntityServiceInterface).to(EntityService);
       container.bind<HealthCheckServiceInterface>(TYPES.HealthCheckServiceInterface).to(HealthCheckService);
@@ -105,6 +105,7 @@ describe('IOC Application', () => {
   beforeEach(() => {
     bootstrapContainer();
     LoggerServiceMock.prototype.container.mockReturnValue(container);
+    LoggerServiceMock.prototype.app.mockReturnValue(application);
   });
 
   afterEach(() => {
@@ -125,9 +126,7 @@ describe('IOC Application', () => {
   it('get Container instance from LoggerService', async () => {
     // Setup
     const loggerService = container.get<LoggerServiceInterface>(TYPES.LoggerServiceInterface);
-    const jsonSchemaService = container.get<JsonSchemaServiceInterface>(TYPES.JsonSchemaServiceInterface);
     const loggerContainer = loggerService.container();
-    const jsonSchemaContainer = jsonSchemaService.container();
 
     // Assert
     expect(loggerService instanceof LoggerService).toBe(true)
@@ -142,11 +141,10 @@ describe('IOC Application', () => {
     });
   });
 
-  // describe.each(SERVICES)('Application instance from Services:', (service) => {
-  //   it(`should application instance from ${service} is equal to container application`, () => {
-  //     const serviceInstance = container.get<AbstractServiceInterface>(TYPES[`${service}Interface`]);
-  //     const containerApp = container.get<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface);
-  //     expect(serviceInstance.app()).toBe(containerApp);
-  //   });
-  // });
+  describe.each(SERVICES)('Application instance from Services:', (service) => {
+    it(`should application instance from ${service} is equal to container application`, () => {
+      const serviceInstance = container.get<AbstractServiceInterface>(TYPES[`${service}Interface`]);
+      expect(serviceInstance.app()).toBe(application);
+    });
+  });
 });
