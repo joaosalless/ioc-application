@@ -1,3 +1,5 @@
+import { SemaphoreService, SemaphoreServiceInterface } from './../src/services/semaphore-service';
+import { ClockService, ClockServiceInterface } from './../src/services/clock-service';
 // Imports
 import "reflect-metadata";
 import { TYPES } from '../src/interfaces/container';
@@ -47,6 +49,7 @@ describe('IOC Application', () => {
     'ApplicationService',
     'AuditService',
     'AuthorizerService',
+    'ClockService',
     'ConfigService',
     'ConsentService',
     'CryptoService',
@@ -60,6 +63,7 @@ describe('IOC Application', () => {
     'LoggerService',
     'MaskerService',
     'SearchService',
+    'SemaphoreService',
     'SerializerService',
     'StateService',
     'StorageService',
@@ -77,6 +81,7 @@ describe('IOC Application', () => {
       container.bind<ApplicationServiceInterface>(TYPES.ApplicationServiceInterface).to(ApplicationService).inSingletonScope();
       container.bind<AuditServiceInterface>(TYPES.AuditServiceInterface).to(AuditService);
       container.bind<AuthorizerServiceInterface>(TYPES.AuthorizerServiceInterface).to(AuthorizerService);
+      container.bind<ClockServiceInterface>(TYPES.ClockServiceInterface).to(ClockService).inSingletonScope();
       container.bind<ConfigServiceInterface>(TYPES.ConfigServiceInterface).to(ConfigService).inSingletonScope();
       container.bind<ConsentServiceInterface>(TYPES.ConsentServiceInterface).to(ConsentService).inTransientScope();
       container.bind<CryptoServiceInterface>(TYPES.CryptoServiceInterface).to(CryptoService).inTransientScope();
@@ -90,6 +95,7 @@ describe('IOC Application', () => {
       container.bind<LoggerServiceInterface>(TYPES.LoggerServiceInterface).to(LoggerServiceMock);
       container.bind<MaskerServiceInterface>(TYPES.MaskerServiceInterface).to(MaskerService);
       container.bind<SearchServiceInterface>(TYPES.SearchServiceInterface).to(SearchService);
+      container.bind<SemaphoreServiceInterface>(TYPES.SemaphoreServiceInterface).to(SemaphoreService);
       container.bind<SerializerServiceInterface>(TYPES.SerializerServiceInterface).to(SerializerService);
       container.bind<StateServiceInterface>(TYPES.StateServiceInterface).to(StateService);
       container.bind<StorageServiceInterface>(TYPES.StorageServiceInterface).to(StorageService);

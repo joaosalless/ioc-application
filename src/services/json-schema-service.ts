@@ -1,5 +1,5 @@
-import { ConfigServiceInterface } from './config-service';
 import "reflect-metadata";
+import { ConfigServiceInterface } from './config-service';
 import { TYPES } from '../interfaces/container';
 import { AbstractService, AbstractServiceInterface } from "./abstract-service";
 import { inject, injectable, interfaces } from "inversify";
